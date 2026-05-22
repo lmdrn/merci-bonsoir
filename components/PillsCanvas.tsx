@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -153,6 +153,16 @@ function PillScene() {
 // ─── Canvas ───────────────────────────────────────────────────────────────────
 
 export default function PillsCanvas() {
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const mobile = window.innerWidth < 768;
+    const hasWebGL = !!window.WebGLRenderingContext;
+    setEnabled(!mobile && hasWebGL);
+  }, []);
+
+  if (!enabled) return null;
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
       <Canvas
